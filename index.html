@@ -1,59 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Static Website</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Request</title>
+    <script>
+        // Function to parse URL parameters
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+        
+        // Function to set iframe src based on script parameter
+        function setIframeSrc() {
+            var scriptParam = getParameterByName('script');
+            if (scriptParam) {
+                var iframe = document.getElementById('myFrame');
+                iframe.src = 'http://de1.bot-hosting.net:22492/scripts?script=' + scriptParam;
+            }
+        }
+
+        // Call setIframeSrc function when the document is ready
+        document.addEventListener("DOMContentLoaded", setIframeSrc);
+    </script>
 </head>
 <body>
-
-<script>
-// Function to make a POST request
-function postData(scriptname) {
-    // Data to send in the request body
-    const requestData = {
-        // Add your data here, if needed
-        script: scriptname
-    };
-
-    // Make a POST request using Fetch API
-    fetch('http://de1.bot-hosting.net:22492/scripts', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestData)
-    })
-    .then(response => {
-        // Check if the request was successful
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        // Parse the response as JSON
-        return response.json();
-    })
-    .then(data => {
-        // Handle the response data
-        console.log('Response from server:', data);
-        // You can update the DOM with the response data if needed
-    })
-    .catch(error => {
-        // Handle errors
-        console.error('There was a problem with the request:', error);
-    });
-}
-
-// Extract the scriptname from the URL query parameters
-const urlParams = new URLSearchParams(window.location.search);
-const scriptname = urlParams.get('script');
-
-// Call the postData function with the extracted scriptname
-if (scriptname) {
-    postData(scriptname);
-} else {
-    console.error('No script name provided in the URL');
-}
-</script>
-
+    <iframe id="myFrame" frameborder="0" allowfullscreen sandbox="allow-top-navigation"></iframe>
 </body>
 </html>
