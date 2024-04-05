@@ -1,35 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox Request</title>
-    <script>
-        // Function to parse URL parameters
-        function getParameterByName(name, url) {
-            if (!url) url = window.location.href;
-            name = name.replace(/[\[\]]/g, "\\$&");
-            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-                results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, " "));
-        }
-        
-        // Function to set iframe src based on script parameter
-        function setIframeSrc() {
-            var scriptParam = getParameterByName('script');
-            if (scriptParam) {
-                var iframe = document.getElementById('myFrame');
-                iframe.src = 'http://de1.bot-hosting.net:22492/scripts?script=' + scriptParam;
-            }
-        }
-
-        // Call setIframeSrc function when the document is ready
-        document.addEventListener("DOMContentLoaded", setIframeSrc);
-    </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTTP Request from HTTPS Website</title>
 </head>
 <body>
-    <iframe id="myFrame" frameborder="0" allowfullscreen sandbox="allow-top-navigation"></iframe>
+
+<h1>HTTP Request from HTTPS Website</h1>
+
+<button onclick="makeHTTPRequest()">Make HTTP Request</button>
+
+<script>
+function makeHTTPRequest() {
+    // URL of the HTTP endpoint you want to request
+    const url = 'http://example.com/api/data';
+
+    // Fetch API to make the HTTP request
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Handle the response data
+            console.log('Response:', data);
+        })
+        .catch(error => {
+            // Handle errors
+            console.error('There was a problem with the HTTP request:', error);
+        });
+}
+</script>
+
 </body>
 </html>
