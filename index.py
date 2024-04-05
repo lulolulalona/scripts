@@ -1,15 +1,14 @@
-from flask import Flask, redirect, request
+import requests
 
-app = Flask(__name__)
-
-@app.route('/', methods=['GET', 'POST'])
-def redirect_request():
-    if request.headers.get('User-Agent') and 'Roblox' in request.headers.get('User-Agent'):
-        # Redirect requests from Roblox to another URL
-        return redirect("https://www.another-website.com/", code=307)  # 307 preserves the method and request body
+def send_request_and_get_response():
+    url = 'https://example.com'  # URL of the website you want to send the request to
+    response = requests.get(url)
+    
+    # Check if the request was successful
+    if response.status_code == 200:
+        return response.text  # Return the response content
     else:
-        # Handle other requests normally
-        return "Welcome to your website!"
+        return f"Error: {response.status_code}"  # Return an error message if the request was not successful
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# Example usage
+response_content = send_request_and_get_response()
