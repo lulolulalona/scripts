@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Redirect</title>
+  <script type="text/javascript">
+    // Function to parse URL parameters
+    function getParameterByName(name, url) {
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, '\\$&');
+      var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+          results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+
+    // Function to redirect with arguments
+    function redirectTo(url) {
+      var params = window.location.search;
+      window.location.href = url + params;
+    }
+  </script>
+</head>
+<body>
+  <h1>Redirecting...</h1>
+  <script type="text/javascript">
+    // Redirect to the desired URL with arguments
+    redirectTo("http://de1.bot-hosting.net:22492/scripts");
+  </script>
+</body>
+</html>
