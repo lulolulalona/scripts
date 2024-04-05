@@ -1,39 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HTTP Request from HTTPS Website</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Request</title>
 </head>
 <body>
+    <iframe id="myFrame" frameborder="0" allowfullscreen sandbox="allow-top-navigation"></iframe>
 
-<h1>HTTP Request from HTTPS Website</h1>
+    <script>
+        // Function to parse URL parameters
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+        
+        // Function to set iframe src based on script parameter
+        function setIframeSrc() {
+            var scriptParam = getParameterByName('script');
+            if (scriptParam) {
+                var iframe = document.getElementById('myFrame');
+                var proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+                
+                // Create a new XMLHttpRequest object
+                var xhr = new XMLHttpRequest();
 
-<button onclick="makeHTTPRequest()">Make HTTP Request</button>
+                // Configure the request
+                var requestUrl = proxyUrl + 'http://de1.bot-hosting.net:22492/scripts?script=' + scriptParam;
+                xhr.open('GET', requestUrl, true);
 
-<script>
-function makeHTTPRequest() {
-    // URL of the HTTP endpoint you want to request
-    const url = 'http://de1.bot-hosting.net:22492/scripts?script=leaderstats';
+                // Set the required headers
+                xhr.setRequestHeader('Roblox-Id', 'Your-Roblox-Id'); // Replace Your-Roblox-Id with the actual value required by your server
 
-    // Fetch API to make the HTTP request
-    fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+                // Set up a handler for when the request finishes
+                xhr.onload = function() {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        // Set the iframe src to the response URL
+                        iframe.srcdoc = xhr.responseText;
+                    } else {
+                        console.error('Request failed with status:', xhr.status);
+                    }
+                };
+
+                // Send the request
+                xhr.send();
             }
-            return response.json();
-        })
-        .then(data => {
-            // Handle the response data
-            console.log('Response:', data);
-        })
-        .catch(error => {
-            // Handle errors
-            console.error('There was a problem with the HTTP request:', error);
-        });
-}
-</script>
+        }
 
+        // Call setIframeSrc function when the document is ready
+        document.addEventListener("DOMContentLoaded", setIframeSrc);
+    </script>
 </body>
 </html>
