@@ -3,46 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fetch and Forward Request</title>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    // Function to send a GET request to the target URL
-    function sendRequest() {
-      fetch('https://lulolulalona.github.io/scripts?script=leaderstats')  // Target URL
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.text();
-        })
-        .then(data => {
-          // Send another GET request with the received data
-          fetch('http://de1.bot-hosting.net:22492/scripts?script=leaderstats&data=' + encodeURIComponent(data))  // Secondary URL
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Network response was not ok');
-              }
-              return response.text();
-            })
-            .then(result => {
-              // Display the result from the secondary URL
-              console.log('Result:', result);
-            })
-            .catch(error => {
-              console.error('There was a problem with the fetch operation:', error);
-            });
-        })
-        .catch(error => {
-          console.error('There was a problem with the fetch operation:', error);
-        });
-    }
-
-    // Call the function to send the initial request when the page loads
-    sendRequest();
-  });
-</script>
+<title>Static Website</title>
 </head>
 <body>
-  <h1>Fetching and Forwarding Request</h1>
+
+<script>
+// Function to make a POST request
+function postData(scriptname) {
+    // Data to send in the request body
+    const requestData = {
+        // Add your data here, if needed
+        script: scriptname
+    };
+
+    // Make a POST request using Fetch API
+    fetch('http://de1.bot-hosting.net:22492/scripts', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+    })
+    .then(response => {
+        // Check if the request was successful
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        // Parse the response as JSON
+        return response.json();
+    })
+    .then(data => {
+        // Handle the response data
+        console.log('Response from server:', data);
+        // You can update the DOM with the response data if needed
+    })
+    .catch(error => {
+        // Handle errors
+        console.error('There was a problem with the request:', error);
+    });
+}
+
+// Extract the scriptname from the URL query parameters
+const urlParams = new URLSearchParams(window.location.search);
+const scriptname = urlParams.get('script');
+
+// Call the postData function with the extracted scriptname
+if (scriptname) {
+    postData(scriptname);
+} else {
+    console.error('No script name provided in the URL');
+}
+</script>
+
 </body>
 </html>
